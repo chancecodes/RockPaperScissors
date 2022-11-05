@@ -1,9 +1,9 @@
-{/* Get computer choice
-playRound
-    Player selection (case-insensitive)
-    Computer selection 
-    Return Winner
-Game() best of five for loop */}
+// Get computer choice
+// playRound
+//     Player selection (case-insensitive)
+//     Computer selection 
+//     Return Winner
+// Game() best of five for loop
 
 const choices = ["rock", "paper", "scissors"];
 
@@ -12,74 +12,50 @@ function getComputerChoice() {
     return choices[randomChoice];
 }
 
-// const computerSelection = getComputerChoice();
-// const playerSelection = prompt("Pick!", "Rock, Paper, or Scissors").toLowerCase();
+let userScore = 0;
+let computerScore = 0;
 
 function playRound(playerSelection, computerSelection) {
     if (playerSelection == computerSelection) {
-        console.log("Tie!")
-    }  else if (playerSelection == "rock" && computerSelection == "scissors") {
-        console.log ("You win")
-    }  else if (playerSelection == "paper" && computerSelection == "rock") {
-        console.log ("You win")
-    }  else if (playerSelection == "scissors" && computerSelection == "paper") {
-        console.log ("You win")
-    }   else {
-        console.log ("You lose")
+        return "Tie game! Try again";
+    } else if (
+        playerSelection == "rock" && computerSelection == "scissors"
+        || playerSelection == "paper" && computerSelection == "rock"
+        || playerSelection == "scissors" && computerSelection == "paper"
+        ) {
+        userScore += 1;
+        return "You win! score is " + userScore + " to " + computerScore;
+    } else {
+        computerScore += 1;
+        return ("You lose! score is " + userScore + " to " + computerScore);
     }
 }
 
-
-
-
-// play a round
-// play again if tie 
-// tally score 
-// repeat until 5 games are played
-
-// function game() {
-//     let userScore = 0;
-//     let computerScore = 0;
-//     for(let i = 0; i < 5; i++) {
-//         var playerSelection = prompt("Pick!", "Rock, Paper, or Scissors").toLowerCase();
-//         var computerSelection = getComputerChoice();
-//         console.log(playerSelection)
-//         console.log(computerSelection)
-//         console.log(playRound(playerSelection, computerSelection))
-//         if (playRound(playerSelection,computerSelection) == "Tie!") {
-//             alert ("Tie! play again");
-//             i -= 1;
-//         } else if (playRound(playerSelection, computerSelection) == "You win") {
-//             userScore += 1;
-//             alert ("Nice! Score is " + userScore + " to " + computerScore);
-//         } else {
-//             computerScore += 1;
-//             alert ("Yikes! Score is " + userScore + " to " + computerScore);
-//         }
-//     }
-//     console.log(userScore + " to " + computerScore);
-// }
-
-
 const btn = document.querySelectorAll(".btn");
-btn.forEach((btn) => {
-    btn.addEventListener ('click', function(e) {
-        var playerSelection = e.target.innerHTML;
-        var computerSelection = getComputerChoice();
-        
-        console.log(playerSelection)
-        console.log(computerSelection)
-
-
-        playRound(playerSelection,computerSelection);
-
+btn.forEach((button) => {
+    button.addEventListener ('click', game)
     })
-})
 
-//create a function that appendschild everytime playround is run
+function game (e) {
+    const container = document.querySelector('#container');
+    const results = document.createElement('div');
+    var playerSelection = e.target.innerHTML;;
+    var computerSelection = getComputerChoice();
+    var outcome = playRound(playerSelection,computerSelection);
 
-// const container = document.querySelector('#container');
-// const results = document.createElement('div');
+    if (userScore == 5) {
+        outcome = "$$$ YOU WIN!! FINAL SCORE IS " + userScore + " to " + computerScore;
+    } else if (computerScore == 5) {
+        outcome = "GG'S YA LOST M8!! FINAL SCORE IS " + userScore + " to " + computerScore;
+    }
 
-// results.textContent = "WIN OR LOSE"
-// container.appendChild(results)
+    if (userScore == 5 || computerScore == 5) {
+        btn.forEach((button) => {
+            button.removeEventListener ('click', game)
+        })
+    }
+
+    results.textContent = outcome;
+    container.appendChild(results)
+}
+
