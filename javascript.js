@@ -5,7 +5,7 @@
 //     Return Winner
 // Game() best of five for loop
 
-const choices = ["rock", "paper", "scissors"];
+const choices = ["Rock", "Paper", "Scissors"];
 
 function getComputerChoice() {
     var randomChoice = Math.floor(Math.random() * choices.length);
@@ -14,48 +14,78 @@ function getComputerChoice() {
 
 let userScore = 0;
 let computerScore = 0;
+let gameCount = 0;
+var timeout;
 
 function playRound(playerSelection, computerSelection) {
     if (playerSelection == computerSelection) {
-        return "Tie game! Try again";
+        return "Tie, try again! You both picked " + playerSelection;
     } else if (
-        playerSelection == "rock" && computerSelection == "scissors"
-        || playerSelection == "paper" && computerSelection == "rock"
-        || playerSelection == "scissors" && computerSelection == "paper"
+        playerSelection == "Rock" && computerSelection == "Scissors"
+        || playerSelection == "Paper" && computerSelection == "Rock"
+        || playerSelection == "Scissors" && computerSelection == "Paper"
         ) {
         userScore += 1;
-        return "You win! score is " + userScore + " to " + computerScore;
+        return "You win! " + playerSelection + " beats " + computerSelection;
     } else {
         computerScore += 1;
-        return ("You lose! score is " + userScore + " to " + computerScore);
+        return "You lose! " + computerSelection + " beats " + playerSelection;
     }
 }
 
 const btn = document.querySelectorAll(".btn");
 btn.forEach((button) => {
-    button.addEventListener ('click', game)
+    button.addEventListener ('click', btn.forEach(clearHighlight))
+    button.addEventListener ('click', game);
     })
 
 function game (e) {
     const container = document.querySelector('#container');
     const results = document.createElement('div');
-    var playerSelection = e.target.innerHTML;;
+    var playerSelection = e.currentTarget.id;
     var computerSelection = getComputerChoice();
+
+    highlight(playerSelection,computerSelection);
+
     var outcome = playRound(playerSelection,computerSelection);
+    gameCount += 1
 
     if (userScore == 5) {
-        outcome = "$$$ YOU WIN!! FINAL SCORE IS " + userScore + " to " + computerScore;
+        outcome = "$$$ YOU WIN!!";
     } else if (computerScore == 5) {
-        outcome = "GG'S YA LOST M8!! FINAL SCORE IS " + userScore + " to " + computerScore;
-    }
+        outcome = "GG'S YA LOST M8!!";
+    };
 
     if (userScore == 5 || computerScore == 5) {
         btn.forEach((button) => {
-            button.removeEventListener ('click', game)
+            button.removeEventListener ('click', game);
         })
-    }
+    };
 
-    results.textContent = outcome;
-    container.appendChild(results)
+    results.textContent = "Game " + gameCount + ": " + outcome;
+    container.insertBefore(results, container.firstElementChild);
+
+    const score = document.querySelector('.score');
+    score.textContent = "Score: " + userScore + " to " + computerScore;
+
 }
 
+function highlight (playerSelection, computerSelection) {
+    
+    var userHighlight = document.querySelector(`#${playerSelection}`);
+    userHighlight.classList.add ('highlight');
+    var compHighlight = document.querySelector(`#comp${computerSelection}`);
+    compHighlight.classList.add ('highlight');
+
+    timeout = setTimeout(function() {
+        userHighlight.classList.remove ('highlight');
+        compHighlight.classList.remove ('highlight');
+    }, 2000)
+
+    clearTimeout (timeout);
+}
+
+
+function clearHighlight (e) {
+    e.target.classList.remove('highlight')
+}
