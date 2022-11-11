@@ -15,7 +15,6 @@ function getComputerChoice() {
 let userScore = 0;
 let computerScore = 0;
 let gameCount = 0;
-var timeout;
 
 function playRound(playerSelection, computerSelection) {
     if (playerSelection == computerSelection) {
@@ -35,13 +34,13 @@ function playRound(playerSelection, computerSelection) {
 
 const btn = document.querySelectorAll(".btn");
 btn.forEach((button) => {
-    button.addEventListener ('click', btn.forEach(clearHighlight))
     button.addEventListener ('click', game);
     })
 
 function game (e) {
     const container = document.querySelector('#container');
     const results = document.createElement('div');
+    results.classList.add('liveScore')
     var playerSelection = e.currentTarget.id;
     var computerSelection = getComputerChoice();
 
@@ -71,21 +70,10 @@ function game (e) {
 }
 
 function highlight (playerSelection, computerSelection) {
+    document.querySelectorAll('.highlight').forEach((el) => el.classList.remove('highlight'));
     
     var userHighlight = document.querySelector(`#${playerSelection}`);
     userHighlight.classList.add ('highlight');
     var compHighlight = document.querySelector(`#comp${computerSelection}`);
     compHighlight.classList.add ('highlight');
-
-    timeout = setTimeout(function() {
-        userHighlight.classList.remove ('highlight');
-        compHighlight.classList.remove ('highlight');
-    }, 2000)
-
-    clearTimeout (timeout);
-}
-
-
-function clearHighlight (e) {
-    e.target.classList.remove('highlight')
 }
