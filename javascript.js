@@ -46,6 +46,7 @@ function game (e) {
     const container = document.querySelector('#container');
     const results = document.createElement('div');
     results.classList.add('liveScore')
+
     var playerSelection = e.currentTarget.id;
     var computerSelection = getComputerChoice();
 
