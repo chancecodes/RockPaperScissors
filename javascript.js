@@ -18,17 +18,17 @@ let gameCount = 0;
 
 function playRound(playerSelection, computerSelection) {
     if (playerSelection == computerSelection) {
-        return "Tie, try again! You both picked " + playerSelection;
+        return "" + playerSelection + " vs " + computerSelection + " = Tie!"
     } else if (
         playerSelection == "Rock" && computerSelection == "Scissors"
         || playerSelection == "Paper" && computerSelection == "Rock"
         || playerSelection == "Scissors" && computerSelection == "Paper"
         ) {
         userScore += 1;
-        return "You win! " + playerSelection + " beats " + computerSelection;
+        return "" + playerSelection + " vs " + computerSelection + " = Win!!";
     } else {
         computerScore += 1;
-        return "You lose! " + computerSelection + " beats " + playerSelection;
+        return "" + playerSelection + " vs " + computerSelection + " = Lose :( ";
     }
 }
 
@@ -36,6 +36,11 @@ const btn = document.querySelectorAll(".btn");
 btn.forEach((button) => {
     button.addEventListener ('click', game);
     })
+
+const refresh = document.querySelector('.refresh')
+refresh.addEventListener ('click', () => {
+    window.location.reload()
+})
 
 function game (e) {
     const container = document.querySelector('#container');
@@ -59,13 +64,14 @@ function game (e) {
         btn.forEach((button) => {
             button.removeEventListener ('click', game);
         })
+        refresh.style.visibility = 'visible'
     };
 
     results.textContent = "Game " + gameCount + ": " + outcome;
-    container.insertBefore(results, container.firstElementChild);
+    container.appendChild(results);
 
     const score = document.querySelector('.score');
-    score.textContent = "Score: " + userScore + " to " + computerScore;
+    score.textContent = "Live Score: " + userScore + " to " + computerScore;
 
 }
 
